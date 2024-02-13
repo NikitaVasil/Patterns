@@ -81,7 +81,7 @@ shop.moods.feeling()
 shop.place.love_shop()
 
 
-3 Паттерн Composite
+//3 Паттерн Composite
 class Technic {
     constructor(price, weight) {
         this.price = price
