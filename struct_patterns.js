@@ -1,11 +1,11 @@
 console.log('---------------------------')
 console.log('Start programm')
 
-// 1. Задание паттернт Адаптер
-// class Adapter {
-//     constructor(className) {
-//         this.className = className
-//     }
+// 1. Задание паттернт Адаптер/Adapter
+class Adapter {
+    constructor(className) {
+        this.className = className
+    }
 
     setName(key,value){
         this.className.setItem(key, value)
@@ -20,23 +20,22 @@ console.log('Start programm')
     }
 }
 
-// const lcStor = new Adapter(localStorage)
-// //проверка нашего Адаптера
-// lcStor.setName('name1', 'Nikita')
-// lcStor.setName('name2', 'Nastya')
-// lcStor.clearName()
-// console.log(lcStor.getName('name1'))
-// console.log(lcStor.getName('name2'))
-// lcStor.setName('name2', 'Nastya')
-// console.log(lcStor.getName('name2'))
+const lcStor = new Adapter(localStorage)
+//проверка нашего Адаптера
+lcStor.setName('name1', 'Nikita')
+lcStor.setName('name2', 'Nastya')
+lcStor.clearName()
+console.log(lcStor.getName('name1'))
+console.log(lcStor.getName('name2'))
+lcStor.setName('name2', 'Nastya')
+console.log(lcStor.getName('name2'))
 
-
-// 2. Паттерн Мост
-// class Shop {
-//     constructor(client, mood, room) {
-//         this.client = client
-//         this.mood = mood
-//         this.room = room
+// 2. Паттерн Мост/Bridge
+class Shop {
+    constructor(client, mood, room) {
+        this.client = client
+        this.mood = mood
+        this.room = room
 
         this.clients = new Clients(this)
         this.moods = new Mood(this)
@@ -81,13 +80,13 @@ shop.moods.feeling()
 shop.place.love_shop()
 
 
-// 3 Паттерн Composite
-// class Technic {
-//     constructor(price, weight) {
-//         this.price = price
-//         this.weight = weight
-//     }
-// }
+// 3 Паттерн Composite/Композиция
+class Technic {
+    constructor(price, weight) {
+        this.price = price
+        this.weight = weight
+    }
+}
 
 class Composite {
 	constructor (label) {
@@ -220,3 +219,117 @@ console.log(ball.inventory())
 console.log('меняется на')
 ball = new Ball()
 console.log(ball.inventory())
+
+
+// 5 Паттерн Фасад/Facade
+class Grade {
+    constructor(name) {
+        this.name = name
+    }
+}
+
+class Pupil {
+    constructor(name) {
+        this.name = name
+    }
+}
+
+class School {
+    constructor(name) {
+        this.name = name
+        this.school = []
+    }
+
+    addGrade(grade) {
+        this.school.push(grade)
+    }
+}
+
+
+class CDPE {
+    constructor(school) {
+        this.pupils = []
+        this.school = school
+    }
+
+    addPupil(pupil){
+        const pupName = new Pupil(pupil)
+        this.pupils.push(pupName.name)
+    }
+
+    send() {
+        const academy = new School(this.school.number)
+        const grade = new Grade(this.school.grades)
+        academy.addGrade(this.school.grades)
+
+        console.log(`Школа: ${academy.name}\nКласс: ${grade.name}`)
+        console.log(`Ученики:`)
+        this.pupils.forEach((element) => console.log(element))
+    }
+}
+
+const cdpe = new CDPE({
+    number: 1283,
+    grades: '7A'
+})
+
+cdpe.addPupil('Никита')
+cdpe.addPupil('Юля')
+cdpe.addPupil('Маруся')
+cdpe.addPupil('Елена')
+
+cdpe.send()
+
+
+//6 Паттерн Flyweight
+class Transport{
+    constructor(brand, type){
+        this.brand = brand
+        this.type = type
+    }
+}
+
+class Flyweight{
+    constructor(...args){
+        this.categories = args
+        this.items = []
+    }
+
+    add(...param) {
+        this.items.push(param.map((v, i) => this.categories[i].indexOf(v)))
+    }
+
+    get transport() {
+        const instance = this
+
+		return (function * () {
+			for (const item of instance.items) {
+				yield new Transport(
+					...item.map((v, i) => instance.categories[i][v])
+				)
+			}
+		})()
+    }
+}
+
+const car = new Flyweight(
+    ['BMW', 'Lexus', 'Volvo', 'KIA'],
+    ['universal', 'hatchback', 'sedan']
+)
+
+car.add('BMW', 'sedan')
+car.add('KIA', 'universal')
+car.add('Lexus', 'sedan')
+
+for (const transport of car.transport) {
+	console.log(transport)
+}
+
+//7 Применение Proxy паттерна
+const pupilProxy = new Pupil('Nikita')
+const pupil = new Proxy(pupilProxy, {
+    get: (obj, prop) => {
+        console.log(`The значение of ${prop} is ${obj[prop]}`);
+    }
+})
+pupil.name
