@@ -4,4 +4,4 @@
 _Которые были мной рассмотрены и изучены_
 
 * [Порождающие паттерны](https://github.com/NikitaVasil/Patterns/blob/master/Generating_patterns.md "Порождающие паттерны")
-* Структурные паттерны
+* [Структурные паттерны](https://github.com/NikitaVasil/Patterns/blob/master/Structural_patterns.md "Структурные паттерны")
